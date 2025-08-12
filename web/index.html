@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Game DApp</title>
+  <meta charset="utf-8">
+</head>
+<body>
+  <h1>Game DApp</h1>
+
+  <section>
+    <h2>Buy GT with USDT</h2>
+    <input id="usdtAmount" placeholder="USDT amount (6 decimals)">
+    <button onclick="buyTokens()">Buy</button>
+  </section>
+
+  <section>
+    <h2>Create/Stake Match</h2>
+    <input id="matchId" placeholder="Match ID">
+    <input id="p1" placeholder="Player 1 address">
+    <input id="p2" placeholder="Player 2 address">
+    <input id="stake" placeholder="Stake amount">
+    <button onclick="createMatch()">Create Match</button>
+  </section>
+
+  <section>
+    <h2>Submit Result</h2>
+    <input id="matchIdResult" placeholder="Match ID">
+    <input id="winner" placeholder="Winner address">
+    <button onclick="submitResult()">Submit</button>
+  </section>
+
+  <script>
+    async function buyTokens() {
+      const amount = document.getElementById("usdtAmount").value;
+      const res = await fetch(`/purchase?amount=${amount}`);
+      console.log(await res.json());
+    }
+
+    async function createMatch() {
+      const data = {
+        matchId: document.getElementById("matchId").value,
+        p1: document.getElementById("p1").value,
+        p2: document.getElementById("p2").value,
+        stake: document.getElementById("stake").value
+      };
+      const res = await fetch("/match/start", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      console.log(await res.json());
+    }
+
+    async function submitResult() {
+      const data = {
+        matchId: document.getElementById("matchIdResult").value,
+        winner: document.getElementById("winner").value
+      };
+      const res = await fetch("/match/result", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      });
+      console.log(await res.json());
+    }
+  </script>
+</body>
+</html>
+
